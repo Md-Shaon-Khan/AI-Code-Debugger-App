@@ -1,6 +1,7 @@
 from google import genai
 from dotenv import load_dotenv
 import os
+import io
 
 load_dotenv()
 
@@ -28,8 +29,15 @@ FORMAT:
 ### Response
 """
 
+    image_parts = []
+
+    for img in images:
+        buf = io.BytesIO()
+        img.save(buf, format="PNG")
+        buf.seek(0)
+        image_parts.append(buf.getvalue())
     response = client.models.generate_content(
-        model="gemini-1.5-flash",
+        model="gemini-3-flash-preview",
         contents=[prompt, *images]
     )
 
